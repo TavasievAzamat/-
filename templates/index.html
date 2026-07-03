@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Регистрация | Лавандовый сервис</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            /* Нежный лавандовый (светло-фиолетовый) фон */
+            background: linear-gradient(145deg, #e9d5ff 0%, #decbff 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', 'Roboto', system-ui, -apple-system, 'Inter', 'Helvetica Neue', sans-serif;
+            padding: 1.5rem;
+        }
+
+        /* Карточка регистрации — мягкая, с воздушностью */
+        .register-card {
+            max-width: 520px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(0px);
+            border-radius: 2rem;
+            padding: 2rem 2rem 2.5rem 2rem;
+            box-shadow: 0 20px 35px -12px rgba(90, 60, 120, 0.25), 0 1px 2px rgba(0,0,0,0.02);
+            transition: all 0.2s ease;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+
+        /* Заголовок приветствия */
+        .greeting {
+            font-size: 1.85rem;
+            font-weight: 600;
+            color: #2d1b4e;
+            text-align: center;
+            margin-bottom: 1rem;
+            letter-spacing: -0.3px;
+            line-height: 1.3;
+        }
+
+        /* акцентный подзаголовок (для изящества) — можно оставить или убрать, но он не мешает */
+        .greeting-sub {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #6b4e8e;
+            margin-bottom: 2rem;
+            border-bottom: 1px dashed #d9c6f0;
+            display: inline-block;
+            width: auto;
+            margin-left: auto;
+            margin-right: auto;
+            padding-bottom: 0.6rem;
+        }
+
+        /* группа формы */
+        .form-group {
+            margin-bottom: 1.7rem;
+        }
+
+        /* стили для label — плавные, читаемые */
+        .form-group label {
+            display: block;
+            font-weight: 550;
+            font-size: 0.95rem;
+            color: #3a2a5a;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.2px;
+        }
+
+        /* белые поля ввода */
+        .form-group input {
+            width: 100%;
+            padding: 0.9rem 1.1rem;
+            background-color: #ffffff;
+            border: 1px solid #e2d4f5;
+            border-radius: 1.2rem;
+            font-size: 1rem;
+            font-family: inherit;
+            color: #1e142f;
+            transition: all 0.2s ease;
+            outline: none;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+        }
+
+        .form-group input:focus {
+            border-color: #b794f4;
+            box-shadow: 0 0 0 3px rgba(183, 148, 244, 0.3);
+            background-color: #fffefc;
+        }
+
+        /* placeholder легкий лавандовый оттенок */
+        .form-group input::placeholder {
+            color: #bcabdf;
+            font-weight: 400;
+            font-size: 0.92rem;
+        }
+
+        /* кнопка — лавандовый (тот же оттенок, но темнее фона) */
+        .register-btn {
+            width: 100%;
+            background: #b47fe6;      /* основной лавандовый, более насыщенный чем фон */
+            border: none;
+            padding: 0.95rem 1.2rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: white;
+            border-radius: 2rem;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.25s ease;
+            margin-top: 0.8rem;
+            letter-spacing: 0.3px;
+            box-shadow: 0 6px 14px rgba(128, 90, 170, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+        }
+
+        .register-btn:hover {
+            background: #9f6bd9;      /* чуть темнее при наведении, сохраняя лавандовую гамму */
+            transform: translateY(-2px);
+            box-shadow: 0 12px 22px rgba(110, 70, 150, 0.3);
+        }
+
+        .register-btn:active {
+            transform: translateY(1px);
+            transition: 0.05s;
+        }
+
+        /* дополнительное сообщение после отправки (ненавязчивое) */
+        .info-message {
+            text-align: center;
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: #7e66a5;
+            background: #f6f0ff;
+            display: inline-block;
+            width: 100%;
+            border-radius: 3rem;
+            padding: 0.5rem;
+            transition: all 0.2s;
+        }
+
+        /* стили для звездочки (необязательно, но аккуратно) */
+        .optional-star {
+            color: #b280e0;
+            font-size: 0.8rem;
+        }
+
+        /* адаптивность для маленьких экранов */
+        @media (max-width: 480px) {
+            .register-card {
+                padding: 1.6rem 1.5rem 2rem 1.5rem;
+            }
+            .greeting {
+                font-size: 1.55rem;
+            }
+            .form-group input {
+                padding: 0.75rem 1rem;
+            }
+            .register-btn {
+                padding: 0.8rem 1rem;
+            }
+        }
+
+        /* минимальная поддержка для даты — чтобы календарь выглядел опрятно */
+        input[type="date"] {
+            color-scheme: light;
+            font-family: inherit;
+        }
+
+        /* небольшая декоративная деталь — лавандовая точка или акцент */
+        .register-card::before {
+            content: '';
+            position: absolute;
+            top: -12px;
+            left: 10%;
+            width: 80px;
+            height: 4px;
+            background: #c9aaf5;
+            border-radius: 4px;
+            opacity: 0.5;
+        }
+
+        .register-card {
+            position: relative;
+        }
+    </style>
+</head>
+<body>
+
+<div class="register-card">
+    <a href = "/about">  ссылка  </a>
+    <!-- Надпись сверху: "Здравствуйте, пожалуйста, пройдите регистрацию!" -->
+    <div class="greeting">
+        Здравствуйте, <br>пожалуйста, пройдите регистрацию!
+    </div>
+    <!-- небольшая изящная линия или подсказка (не мешает полям, чисто визуально) -->
+    <div style="text-align: center; margin-bottom: 1.8rem;">
+        <span style="background: #ede4ff; padding: 0.2rem 1rem; border-radius: 40px; font-size: 0.75rem; color:#5b4282;">✨ добро пожаловать ✨</span>
+    </div>
+
+    <!-- ФОРМА регистрации -->
+    <form id="registrationForm" action="/sait" method="post">
+        <!-- 1. Поле: Ваше ФИО -->
+        <div class="form-group">
+            <label for="fullname">📝 Ваше ФИО:</label>
+            <input type="text" id="fullname" name="fullname" placeholder="Иванова Анна Петровна" autocomplete="name" required>
+        </div>
+
+        <!-- Поле 2: Пароль (вместо даты рождения) -->
+        <div class="form-group">
+            <label for="password">Пароль:</label>
+            <input type="password" id="password" name="password"
+           placeholder="Введите пароль"
+           autocomplete="new-password"
+           required>
+</div>
+
+        <!-- 3. Поле: Введите E-mail -->
+        <div class="form-group">
+            <label for="email">📧 Введите E-mail:</label>
+            <input type="email" id="email" name="email" placeholder="example@mail.ru" autocomplete="email" required>
+        </div>
+
+        <!-- Кнопка с надписью "Зарегистрироваться" -->
+        <button type="submit" class="register-btn">Зарегистрироваться</button>
+        
+        <!-- Сообщение об успехе или ошибке (всплывающее ненавязчиво) -->
+        <div id="formFeedback" class="info-message" style="display: none;"></div>
+    </form>
+
+    <!-- необязательный текст-примечание, что все поля важны, но не мешает основному дизайну -->
+    <div style="text-align: center; margin-top: 1.2rem; font-size: 0.7rem; color: #b69dd6;">
+        * все поля обязательны для заполнения
+    </div>
+</div>
+</body>
+</html>

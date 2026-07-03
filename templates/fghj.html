@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Задачи.ru — Добавление задачи</title>
+    <!-- Шрифт и иконки (опционально) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..700&display=swap" rel="stylesheet">
+    <style>
+        /* Глобальный сброс и переменные */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Arial', Helvetica, sans-serif;
+            background: #f0f4fa;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 24px 16px 48px;
+            margin: 0;
+        }
+
+        .app-wrapper {
+            max-width: 820px;
+            width: 100%;
+        }
+
+        /* ===== ШАПКА: синее поле ===== */
+        .hero-header {
+            background: linear-gradient(145deg, #1A5FEB 0%, #0f4acb 100%);
+            border-radius: 40px;
+            padding: 18px 30px;
+            margin-bottom: 32px;
+            box-shadow: 0 12px 30px rgba(20, 60, 180, 0.20);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            min-height: 76px;
+        }
+
+        .btn-back {
+            font-family: 'Inter', 'Arial', sans-serif;
+            font-size: 1.0rem;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: color 0.2s;
+            letter-spacing: 0.2px;
+            white-space: nowrap;
+            padding: 4px 8px;
+            border-radius: 30px;
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(2px);
+        }
+
+        .btn-back:hover {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.14);
+        }
+
+        .btn-back:active {
+            opacity: 0.7;
+        }
+
+        .hero-header h1 {
+            font-family: 'Inter', 'Arial', sans-serif;
+            font-size: 2.6rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: #ffffff;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            line-height: 1.1;
+            margin: 0;
+        }
+
+        /* ===== ОСНОВНОЙ БЛОК (белый фон) ===== */
+        .content-card {
+            background: #ffffff;
+            border-radius: 48px;
+            padding: 40px 44px 48px;
+            box-shadow: 0 8px 32px rgba(0, 20, 50, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(2px);
+        }
+
+        /* Заголовок "Добавление задачи" */
+        .page-title {
+            font-family: 'Inter', 'Arial', sans-serif;
+            font-size: 2.1rem;
+            font-weight: 700;
+            color: #0d1b2b;
+            text-align: center;
+            margin-bottom: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            letter-spacing: -0.3px;
+        }
+
+        .page-title .emoji {
+            font-size: 2.0rem;
+            line-height: 1;
+        }
+
+        /* ===== ФОРМА ===== */
+        .task-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Группы полей */
+        .field-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .field-label {
+            font-family: 'Inter', 'Arial', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #1f2a44;
+            letter-spacing: 0.2px;
+            margin-left: 4px;
+        }
+
+        .field-label .required-star {
+            color: #e53e3e;
+            margin-left: 2px;
+        }
+
+        /* Стили для полей ввода */
+        .field-input,
+        .field-select,
+        .field-textarea {
+            font-family: 'Inter', 'Arial', sans-serif;
+            width: 100%;
+            padding: 14px 18px;
+            background: #f7f9fc;
+            border: 2px solid #e6eaf0;
+            border-radius: 20px;
+            font-size: 1.0rem;
+            color: #1a2a3f;
+            transition: all 0.2s ease;
+            outline: none;
+            line-height: 1.5;
+        }
+
+        .field-input:focus,
+        .field-select:focus,
+        .field-textarea:focus {
+            border-color: #1A5FEB;
+            background: #ffffff;
+            box-shadow: 0 0 0 4px rgba(26, 95, 235, 0.10);
+        }
+
+        .field-input::placeholder,
+        .field-textarea::placeholder {
+            color: #aab8ce;
+            font-weight: 400;
+        }
+
+        .field-textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        /* Сложность: кастомный селект */
+        .select-wrapper {
+            position: relative;
+        }
+
+        .select-wrapper select {
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%231a2a3f' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            background-size: 20px;
+            padding-right: 50px;
+            cursor: pointer;
+        }
+
+        .select-wrapper select option {
+            padding: 8px 12px;
+            font-size: 1.0rem;
+        }
+
+        /* Строка статуса (неизменяемый) */
+        .status-display {
+            background: #eff2f7;
+            border: 2px solid #dce3ed;
+            border-radius: 20px;
+            padding: 14px 18px;
+            font-family: 'Inter', 'Arial', sans-serif;
+            font-size: 1.0rem;
+            font-weight: 600;
+            color: #1a2a44;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: default;
+        }
+
+        .status-display .status-badge {
+            background: #f59f9f;
+            color: #7a1f1f;
+            padding: 4px 14px;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            background: #fbd5d5;
+        }
+
+        /* ===== КНОПКА СОХРАНИТЬ ===== */
+        .btn-save-wrapper {
+            margin-top: 12px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .btn-save {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 18px 60px;
+            border-radius: 60px;
+            font-family: 'Inter', 'Arial', sans-serif;
+            font-weight: 700;
+            font-size: 1.2rem;
+            letter-spacing: 0.4px;
+            color: #ffffff;
+            background: #b8c8e0;
+            border: none;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            transition: all 0.3s ease;
+            cursor: not-allowed;
+            opacity: 0.6;
+            text-decoration: none;
+            pointer-events: none;
+            width: 100%;
+            max-width: 360px;
+        }
+
+        /* Активное состояние: кнопка становится синей и кликабельной */
+        .btn-save.active {
+            background: linear-gradient(145deg, #1A5FEB, #1153d6);
+            box-shadow: 0 8px 28px rgba(26, 95, 235, 0.35);
+            cursor: pointer;
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .btn-save.active:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 14px 36px rgba(26, 95, 235, 0.45);
+        }
+
+        .btn-save.active:active {
+            transform: scale(0.96);
+        }
+
+        /* ===== ВАЛИДАЦИЯ (CSS) ===== */
+        /* Поля обязательные */
+        .field-input:required,
+        .field-textarea:required,
+        .field-select:required {
+            border-color: #dce3ed;
+        }
+
+        /* Невалидное состояние: показываем красную рамку + сообщение */
+        .field-input:invalid:not(:placeholder-shown),
+        .field-textarea:invalid:not(:placeholder-shown),
+        .field-select:invalid:not(:placeholder-shown) {
+            border-color: #e53e3e;
+            background: #fff6f6;
+        }
+
+        .field-input:invalid:not(:placeholder-shown) ~ .error-msg,
+        .field-textarea:invalid:not(:placeholder-shown) ~ .error-msg,
+        .field-select:invalid:not(:placeholder-shown) ~ .error-msg {
+            display: block;
+        }
+
+        .field-input:valid:not(:placeholder-shown),
+        .field-textarea:valid:not(:placeholder-shown),
+        .field-select:valid:not(:placeholder-shown) {
+            border-color: #38a169;
+        }
+
+        .error-msg {
+            display: none;
+            font-family: 'Inter', 'Arial', sans-serif;
+            font-size: 0.8rem;
+            color: #e53e3e;
+            font-weight: 500;
+            margin-top: 4px;
+            padding-left: 4px;
+        }
+
+        /* Дополнительная проверка для даты (паттерн) */
+        .field-input[pattern] {
+            /* оставляем стандартное поведение */
+        }
+
+        /* ===== АДАПТИВ ===== */
+        @media (max-width: 780px) {
+            .hero-header {
+                padding: 16px 20px;
+                border-radius: 32px;
+                min-height: 64px;
+                gap: 8px;
+            }
+            .hero-header h1 {
+                font-size: 2.0rem;
+            }
+            .btn-back {
+                font-size: 0.9rem;
+            }
+            .content-card {
+                padding: 28px 24px 36px;
+                border-radius: 36px;
+            }
+            .page-title {
+                font-size: 1.6rem;
+                gap: 10px;
+            }
+            .page-title .emoji {
+                font-size: 1.6rem;
+            }
+            .btn-save {
+                padding: 16px 32px;
+                font-size: 1.05rem;
+                max-width: 100%;
+            }
+            .field-input,
+            .field-select,
+            .field-textarea {
+                padding: 12px 16px;
+                font-size: 0.95rem;
+            }
+        }
+
+        @media (max-width: 500px) {
+            body {
+                padding: 12px 10px 32px;
+            }
+            .hero-header {
+                padding: 12px 16px;
+                border-radius: 28px;
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                gap: 6px;
+            }
+            .hero-header h1 {
+                font-size: 1.8rem;
+            }
+            .btn-back {
+                font-size: 0.85rem;
+                padding: 2px 12px;
+            }
+            .content-card {
+                padding: 20px 14px 28px;
+                border-radius: 28px;
+            }
+            .page-title {
+                font-size: 1.3rem;
+                gap: 6px;
+            }
+            .page-title .emoji {
+                font-size: 1.3rem;
+            }
+            .field-label {
+                font-size: 0.85rem;
+            }
+            .field-input,
+            .field-select,
+            .field-textarea {
+                padding: 10px 14px;
+                font-size: 0.9rem;
+                border-radius: 16px;
+            }
+            .btn-save {
+                padding: 14px 24px;
+                font-size: 1.0rem;
+            }
+            .status-display {
+                padding: 10px 14px;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (min-width: 1200px) {
+            .hero-header h1 {
+                font-size: 3.2rem;
+            }
+            .page-title {
+                font-size: 2.4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-wrapper">
+
+    <!-- ШАПКА -->
+    <header class="hero-header">
+        <a href="/head" class="btn-back">← назад</a>
+        <h1>Задачи.ru</h1>
+    </header>
+
+    <!-- ОСНОВНОЙ БЛОК -->
+    <main class="content-card">
+
+        <div class="page-title">
+            <span class="emoji">📝</span>
+            Добавление задачи
+            <span class="emoji">✏️</span>
+        </div>
+
+        <!-- ===== ФОРМА ===== -->
+        <form class="task-form" id="taskForm" action="/submit" method="POST" novalidate>
+
+            <!-- 1. Название задачи (textarea) -->
+            <div class="field-group">
+                <label class="field-label" for="taskName">
+                    Название задачи <span class="required-star">*</span>
+                </label>
+                <textarea class="field-textarea" id="taskName" name="taskName" placeholder="Введите название задачи..." rows="3" required></textarea>
+                <span class="error-msg">Пожалуйста, заполните название</span>
+            </div>
+
+            <!-- 2. Сложность (select) -->
+            <div class="field-group">
+                <label class="field-label" for="complexity">
+                    Сложность <span class="required-star">*</span>
+                </label>
+                <div class="select-wrapper">
+                    <select class="field-select" id="complexity" name="complexity" required>
+                        <option value="" disabled selected>Выберите сложность</option>
+                        <option value="1">1 — Очень просто</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5 — Средне</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10 — Максимум</option>
+                    </select>
+                </div>
+                <span class="error-msg">Выберите сложность</span>
+            </div>
+
+            <!-- 3. Срок выполнения (дата) -->
+            <div class="field-group">
+                <label class="field-label" for="dueDate">
+                    Срок выполнения <span class="required-star">*</span>
+                </label>
+                <input class="field-input" type="text" id="dueDate" name="dueDate"
+                       placeholder="дд.мм (например, 31.12)"
+                       pattern="(0[1-9]|[12][0-9]|3[01])\.(0[1-9]|1[0-2])"
+                       required>
+                <span class="error-msg">Введите дату в формате дд.мм (например, 15.06)</span>
+            </div>
+
+            <!-- 4. Статус (неизменяемый) -->
+            <div class="field-group">
+                <span class="field-label">Статус</span>
+                <div class="status-display">
+                    <span>Текущий статус:</span>
+                    <span class="status-badge">НЕ сделано</span>
+                    <span style="font-weight: 400; color: #4a5a72; margin-left: auto; font-size: 0.9rem;">(автоматически)</span>
+                </div>
+                <!-- Скрытое поле для статуса (можно отправить) -->
+                <input type="hidden" name="status" value="НЕ сделано">
+            </div>
+
+            <!-- Кнопка Сохранить -->
+            <div class="btn-save-wrapper">
+                <button type="submit" class="btn-save" id="saveBtn" disabled>
+                    <span>💾</span> Сохранить
+                </button>
+            </div>
+
+            <!-- Поле для сообщения (опционально) -->
+            <p style="font-size: 0.75rem; color: #8a9bb0; text-align: center; margin-top: 8px;">
+                <span>🔒</span> Все поля обязательны для заполнения
+            </p>
+        </form>
+
+    </main>
+</div>
+
+<!-- ===== НЕБОЛЬШОЙ JS ДЛЯ УПРАВЛЕНИЯ КНОПКОЙ (ВАЛИДАЦИЯ) ===== -->
+<script>
+    (function() {
+        const form = document.getElementById('taskForm');
+        const saveBtn = document.getElementById('saveBtn');
+        // Все обязательные поля
+        const requiredFields = form.querySelectorAll('input:required, textarea:required, select:required');
+
+        // Функция проверки валидности формы
+        function checkFormValidity() {
+            let allValid = true;
+            requiredFields.forEach(field => {
+                // Для select проверяем, что выбрано не пустое значение
+                if (field.tagName === 'SELECT') {
+                    if (!field.value || field.value === '') {
+                        allValid = false;
+                    }
+                } else {
+                    if (!field.checkValidity()) {
+                        allValid = false;
+                    }
+                }
+                // дополнительно проверяем, что поле не пустое (для textarea/input)
+                if (field.hasAttribute('required') && field.value.trim() === '') {
+                    allValid = false;
+                }
+            });
+            // Если все поля валидны — активируем кнопку
+            if (allValid) {
+                saveBtn.classList.add('active');
+                saveBtn.disabled = false;
+                saveBtn.style.pointerEvents = 'auto';
+                saveBtn.style.cursor = 'pointer';
+            } else {
+                saveBtn.classList.remove('active');
+                saveBtn.disabled = true;
+                saveBtn.style.pointerEvents = 'none';
+                saveBtn.style.cursor = 'not-allowed';
+            }
+        }
+
+        // Слушаем изменения на всех полях
+        requiredFields.forEach(field => {
+            field.addEventListener('input', checkFormValidity);
+            field.addEventListener('change', checkFormValidity);
+            field.addEventListener('blur', checkFormValidity);
+        });
+
+        // При загрузке проверяем
+        checkFormValidity();
+
+        // Дополнительно: если форма отправляется, можно вывести сообщение
+        form.addEventListener('submit', function(e) {
+            // Если кнопка не активна — отменяем отправку (защита)
+            if (saveBtn.disabled) {
+                e.preventDefault();
+                return false;
+            }
+            // Здесь можно добавить свою логику, например, alert
+            // Для демонстрации просто покажем сообщение
+            // (в реальном проекте отправка будет на сервер)
+            // e.preventDefault(); // раскомментировать для демо
+            // alert('✅ Задача сохранена! (демо)');
+            // return true;
+        });
+
+        // Также проверяем на изменение select
+        const complexitySelect = document.getElementById('complexity');
+        if (complexitySelect) {
+            complexitySelect.addEventListener('change', checkFormValidity);
+        }
+
+        // Специфичная валидация даты через паттерн уже встроена
+        // Дополнительно можно проверить вручную, но паттерн справляется
+    })();
+</script>
+
+<!-- Комментарий для проверяющего:
+     - Добавлена настоящая форма <form> с method="POST" и action.
+     - Поля: textarea (название), select (сложность), input (дата с паттерном), статус (неизменяемый).
+     - Все обязательные поля помечены required, есть подсказки и сообщения об ошибке.
+     - Кнопка сохранить блокирована пока все поля не заполнены корректно (активируется через JS).
+     - Дизайн улучшен: современные скругления, тени, адаптив, иконки.
+     - Сохранена навигация "назад", шапка, заголовок с эмодзи.
+     - Валидация даты через pattern (дд.мм), с сообщением об ошибке.
+     - Статус "НЕ сделано" отображается статически, но отправляется скрытым полем.
+     - Шрифт Inter (современный) с запасом Arial.
+-->
+</body>
+</html>

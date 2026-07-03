@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Главная страница | Личный сайт</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(145deg, #f4f9ff 0%, #e0eafc 100%);
+            font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+            line-height: 1.5;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1.5rem;
+            color: #1a2c3e;
+        }
+
+        /* Главный контейнер */
+        .site-container {
+            max-width: 1280px;
+            width: 100%;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(2px);
+            border-radius: 3rem;
+            box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.2), 0 2px 8px rgba(0, 0, 0, 0.02);
+            padding: 2.5rem 2rem;
+            transition: all 0.3s ease;
+        }
+
+        /* Блок с именем и фамилией */
+        .hero {
+            text-align: center;
+            margin-bottom: 3.5rem;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: 3.6rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #1e3c72, #2b4c7c, #1b2f44);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            margin-bottom: 0.5rem;
+            display: inline-block;
+            padding: 0 0.5rem;
+        }
+
+        .name-decoration {
+            display: inline-block;
+            border-bottom: 3px solid #ffb347;
+            padding-bottom: 0.15em;
+        }
+
+        .hero-sub {
+            font-size: 1.2rem;
+            color: #2c4c6e;
+            background: rgba(255, 248, 235, 0.7);
+            display: inline-block;
+            padding: 0.4rem 1.5rem;
+            border-radius: 60px;
+            backdrop-filter: blur(4px);
+            font-weight: 500;
+            margin-top: 0.8rem;
+        }
+
+        /* Заголовок блока фактов */
+        .facts-header {
+            text-align: center;
+            margin-bottom: 2.8rem;
+        }
+
+        .facts-header h2 {
+            font-size: 2.1rem;
+            font-weight: 700;
+            color: #1a3e50;
+            position: relative;
+            display: inline-block;
+            letter-spacing: -0.3px;
+        }
+
+        .facts-header h2:after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 20%;
+            width: 60%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #ffb347, #ff8c42, transparent);
+            border-radius: 3px;
+        }
+
+        /* Сетка для трёх фактов */
+        .facts-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 1rem;
+        }
+
+        /* Карточка факта */
+        .fact-card {
+            background: white;
+            border-radius: 2rem;
+            padding: 1.8rem 1.5rem 2rem;
+            box-shadow: 0 20px 30px -12px rgba(0, 0, 0, 0.08);
+            transition: transform 0.25s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(2px);
+            text-align: center;
+            cursor: default;
+        }
+
+        .fact-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 28px 35px -15px rgba(0, 0, 0, 0.15);
+            border-color: #ffd3a5;
+        }
+
+        .fact-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+            background: #fef5e8;
+            width: 70px;
+            height: 70px;
+            line-height: 70px;
+            border-radius: 50%;
+            box-shadow: 0 8px 14px -6px rgba(0, 0, 0, 0.1);
+        }
+
+        .fact-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 1rem 0 0.75rem;
+            color: #2c3e50;
+            letter-spacing: -0.3px;
+        }
+
+        .fact-text {
+            font-size: 1rem;
+            color: #2c4f6e;
+            line-height: 1.45;
+            font-weight: 500;
+        }
+
+        /* Декоративный футер */
+        .site-footer {
+            margin-top: 3.5rem;
+            text-align: center;
+            font-size: 0.85rem;
+            color: #4a6a85;
+            border-top: 1px solid rgba(49, 76, 97, 0.15);
+            padding-top: 1.8rem;
+            font-weight: 500;
+        }
+
+        /* Адаптивность */
+        @media (max-width: 850px) {
+            .facts-grid {
+                gap: 1.5rem;
+            }
+            .hero h1 {
+                font-size: 2.7rem;
+            }
+            .site-container {
+                padding: 1.8rem;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .facts-grid {
+                grid-template-columns: 1fr;
+                gap: 1.8rem;
+            }
+            .hero h1 {
+                font-size: 2.3rem;
+            }
+            .fact-card {
+                max-width: 450px;
+                margin: 0 auto;
+                width: 100%;
+            }
+            .site-container {
+                padding: 1.5rem;
+            }
+            .hero-sub {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 1rem;
+            }
+            .hero h1 {
+                font-size: 2rem;
+            }
+            .fact-icon {
+                width: 60px;
+                height: 60px;
+                line-height: 60px;
+                font-size: 2.5rem;
+            }
+        }
+
+        /* Анимация появления */
+        @keyframes fadeSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero, .fact-card {
+            animation: fadeSlideUp 0.5s ease-out forwards;
+        }
+
+        .fact-card:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+        .fact-card:nth-child(3) {
+            animation-delay: 0.2s;
+        }
+    </style>
+</head>
+<body>
+    <div class="site-container">
+        <!-- Блок: фамилия и имя -->
+        <div class="hero">
+            <h1>
+                <span class="name-decoration">Андрей Воронцов</span>
+            </h1>
+            <div class="hero-sub">✨ персональная страница ✨</div>
+        </div>
+
+        <!-- Блок с тремя интересными фактами -->
+        <div class="facts-header">
+            <h2>Три факта обо мне</h2>
+        </div>
+
+        <div class="facts-grid">
+            <!-- Факт 1 -->
+            <div class="fact-card">
+                <div class="fact-icon">🌍</div>
+                <div class="fact-title">Гражданин мира</div>
+                <div class="fact-text">{{ fact[0] }}</div>
+            </div>
+            <!-- Факт 2 -->
+            <div class="fact-card">
+                <div class="fact-icon">🧠</div>
+                <div class="fact-title">Вечный ученик</div>
+                <div class="fact-text">{{ fact[1] }}</div>
+            </div>
+            <!-- Факт 3 -->
+            <div class="fact-card">
+                <div class="fact-icon">🎧</div>
+                <div class="fact-title">Звуковой нарратив</div>
+                <div class="fact-text">{{ fact[2] }}</div>
+            </div>
+        </div>
+
+        <!-- Небольшой футер, не отвлекающий от главного -->
+        <div class="site-footer">
+            <span>✨ каждый факт — часть моего пути ✨</span>
+        </div>
+    </div>
+</body>
+</html>

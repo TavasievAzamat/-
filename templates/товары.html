@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Создать задачу | Ежедневник</title>
+    <!-- Google Fonts & Font Awesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            padding: 2rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* основная карточка формы */
+        .create-card {
+            max-width: 700px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.97);
+            backdrop-filter: blur(2px);
+            border-radius: 2rem;
+            box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.25), 0 2px 6px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            transition: transform 0.2s;
+        }
+
+        /* шапка с навигацией */
+        .form-header {
+            background: white;
+            padding: 1.5rem 2rem 0.8rem 2rem;
+            border-bottom: 1px solid #eef2f8;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .title-area h2 {
+            font-size: 1.7rem;
+            font-weight: 700;
+            background: linear-gradient(145deg, #1e4970, #2c628b);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .title-area h2 i {
+            color: #2e6a96;
+            background: none;
+        }
+
+        .nav-back {
+            background: #eef3fc;
+            padding: 0.5rem 1rem;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            color: #2c5e86;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-back:hover {
+            background: #e2ecf5;
+            color: #1a486b;
+            transform: translateX(-3px);
+        }
+
+        /* основной контент формы */
+        .form-container {
+            padding: 2rem 2rem 2rem 2rem;
+        }
+
+        .input-field {
+            margin-bottom: 1.8rem;
+        }
+
+        label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            color: #1d4d6e;
+            margin-bottom: 0.6rem;
+            font-size: 0.9rem;
+        }
+
+        label i {
+            font-size: 1rem;
+            color: #3e7ea7;
+        }
+
+        .required-star {
+            color: #e26d5c;
+            font-size: 1rem;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 0.9rem 1rem;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            border: 1.5px solid #e2eaf1;
+            border-radius: 1.2rem;
+            background: #ffffff;
+            transition: all 0.2s;
+            outline: none;
+            color: #1f3e54;
+            font-weight: 500;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            border-color: #5f9bc2;
+            box-shadow: 0 0 0 3px rgba(47, 108, 158, 0.15);
+        }
+
+        .priority-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 0.3rem;
+        }
+
+        .priority-option {
+            flex: 1;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .priority-option input {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .priority-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            background: #f5f9fe;
+            border: 1.5px solid #e2ecf5;
+            border-radius: 2rem;
+            padding: 0.7rem 0.5rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            cursor: pointer;
+            color: #2e5a7a;
+        }
+
+        .priority-option input:checked + .priority-label {
+            background: #e7f0fa;
+            border-color: #2e6a96;
+            color: #1c577d;
+            box-shadow: 0 2px 6px rgba(46, 106, 150, 0.2);
+        }
+
+        .priority-label i {
+            font-size: 1rem;
+        }
+
+        /* низ: кнопки */
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            flex: 1;
+            background: #2e6a96;
+            border: none;
+            padding: 0.9rem;
+            border-radius: 2rem;
+            font-weight: 700;
+            font-size: 1rem;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary:hover {
+            background: #1f557b;
+            transform: scale(0.98);
+        }
+
+        .btn-secondary {
+            flex: 1;
+            background: transparent;
+            border: 1.5px solid #caddf0;
+            padding: 0.9rem;
+            border-radius: 2rem;
+            font-weight: 600;
+            font-size: 1rem;
+            color: #366480;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-secondary:hover {
+            background: #eef3fc;
+            border-color: #8fb9d6;
+        }
+
+        /* сообщения об успехе/ошибке */
+        .message-area {
+            margin-top: 1.5rem;
+            padding: 0.9rem;
+            border-radius: 1rem;
+            display: none;
+            font-weight: 500;
+            align-items: center;
+            gap: 0.7rem;
+        }
+
+        .message-area.success {
+            background: #e0f2e9;
+            color: #1d6f4c;
+            border-left: 4px solid #2e9b6e;
+            display: flex;
+        }
+
+        .message-area.error {
+            background: #ffe8e6;
+            color: #bc5a4a;
+            border-left: 4px solid #e26d5c;
+            display: flex;
+        }
+
+        .info-hint {
+            background: #f0f6fd;
+            padding: 0.9rem;
+            border-radius: 1rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.85rem;
+            color: #2f688b;
+            display: flex;
+            gap: 0.6rem;
+            align-items: center;
+        }
+
+        @media (max-width: 550px) {
+            body {
+                padding: 1rem;
+            }
+            .form-header, .form-container {
+                padding-left: 1.2rem;
+                padding-right: 1.2rem;
+            }
+            .priority-label span {
+                font-size: 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="create-card">
+        <div class="form-header">
+            <div class="title-area">
+                <h2>
+                    <i class="fas fa-plus-circle"></i>
+                    Создать новую задачу
+                </h2>
+            </div>
+            <a href="#" id="backToMainLink" class="nav-back">
+                <i class="fas fa-arrow-left"></i> На главную
+            </a>
+        </div>
+
+        <div class="form-container">
+            <div class="info-hint">
+                <i class="fas fa-lightbulb"></i>
+                <span>Заполните детали задачи. После создания она появится в общем списке повседневных дел.</span>
+            </div>
+
+            <form id="taskCreationForm" method="post" action="/add">
+                <div class="input-field">
+                    <label><i class="fas fa-heading"></i> Название задачи <span class="required-star">*</span></label>
+                    <input type="text" id="title" name="АБЦДЕ" placeholder="Например: Купить продукты, Сделать отчёт, Позвонить..." autocomplete="off" maxlength="120">
+                </div>
+
+                <div class="input-field">
+                    <label><i class="fas fa-align-left"></i> Описание (необязательно)</label>
+                    <textarea id="opisanie" name = "opisanie" placeholder="Добавьте заметки, детали или список подзадач..."></textarea>
+                </div>
+
+                <div class="input-field">
+                    <label><i class="fas fa-flag"></i> Приоритет</label>
+                    <div class="priority-group">
+                        <label class="priority-option">
+                            <input type="radio" name="priority" value="low" checked>
+                            <span class="priority-label"><i class="fas fa-arrow-down" style="color:#5fa07e;"></i> <span>Низкий</span></span>
+                        </label>
+                        <label class="priority-option">
+                            <input type="radio" name="priority" value="medium">
+                            <span class="priority-label"><i class="fas fa-minus" style="color:#e7b42c;"></i> <span>Средний</span></span>
+                        </label>
+                        <label class="priority-option">
+                            <input type="radio" name="priority" value="high">
+                            <span class="priority-label"><i class="fas fa-arrow-up" style="color:#e26d5c;"></i> <span>Высокий</span></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="input-field">
+                    <label><i class="fas fa-calendar-day"></i> Дата / срок (опционально)</label>
+                    <input name="u" type="date" id="taskDueDate">
+                </div>
+
+                <div class="input-field">
+                    <label><i class="fas fa-tag"></i> Категория / тег</label>
+                    <select id="taskCategory">
+                        <option value="личные">🏡 Личные дела</option>
+                        <option value="работа">💼 Работа</option>
+                        <option value="здоровье">🧘 Здоровье</option>
+                        <option value="дом">🏠 По дому</option>
+                        <option value="другое">✨ Другое</option>
+                    </select>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" id="clearFormBtn" class="btn-secondary"><i class="fas fa-eraser"></i> Очистить</button>
+                    <button type="submit" id="submitTaskBtn" class="btn-primary"><i class="fas fa-save"></i> Создать задачу</button>
+                </div>
+            </form>
+
+            <div id="formMessage" class="message-area"></div>
+        </div>
+    </div>
+
+<!--    <script>-->
+<!--        // Ключ для хранения списка задач в localStorage (совместимость с предыдущей страницей)-->
+<!--        const STORAGE_KEY = "daily_tasks_app";-->
+
+<!--        // Функция получения текущих задач из localStorage (чтобы добавить новую)-->
+<!--        function getCurrentTasks() {-->
+<!--            const stored = localStorage.getItem(STORAGE_KEY);-->
+<!--            if (stored) {-->
+<!--                try {-->
+<!--                    const parsed = JSON.parse(stored);-->
+<!--                    if (Array.isArray(parsed)) {-->
+<!--                        return parsed;-->
+<!--                    }-->
+<!--                } catch(e) {}-->
+<!--            }-->
+<!--            // если нет задач — создаём начальный минимальный массив (можно пустой, но лучше небольшой)-->
+<!--            // Чтобы не терять функциональность, возвращаем пустой массив, но на главной странице есть дефолтный набор.-->
+<!--            // При добавлении задачи через эту форму, мы добавим в существующий массив или инициализируем пустым.-->
+<!--            return [];-->
+<!--        }-->
+
+<!--        // Сохранение задач обратно в хранилище-->
+<!--        function saveTasks(tasks) {-->
+<!--            localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));-->
+<!--        }-->
+
+<!--        // Генерация уникального ID (timestamp + рандом)-->
+<!--        function generateId() {-->
+<!--            return Date.now() + Math.random() * 10000;-->
+<!--        }-->
+
+<!--        // Экранирование для безопасного отображения (здесь не нужно, но для корректного сохранения текста)-->
+<!--        function sanitizeText(str) {-->
+<!--            if (!str) return "";-->
+<!--            return str.trim();-->
+<!--        }-->
+
+<!--        // Отображение сообщения в форме-->
+<!--        function showMessage(text, isError = false) {-->
+<!--            const msgDiv = document.getElementById("formMessage");-->
+<!--            msgDiv.innerHTML = isError ? `<i class="fas fa-exclamation-triangle"></i> ${text}` : `<i class="fas fa-check-circle"></i> ${text}`;-->
+<!--            msgDiv.className = `message-area ${isError ? "error" : "success"}`;-->
+
+<!--            // через 4 секунды скрыть сообщение, если это успех-->
+<!--            if (!isError) {-->
+<!--                setTimeout(() => {-->
+<!--                    if (msgDiv.className.includes("success")) {-->
+<!--                        msgDiv.style.display = "none";-->
+<!--                        msgDiv.className = "message-area";-->
+<!--                    }-->
+<!--                }, 4000);-->
+<!--            } else {-->
+<!--                setTimeout(() => {-->
+<!--                    if (msgDiv.className.includes("error")) {-->
+<!--                        msgDiv.style.display = "none";-->
+<!--                        msgDiv.className = "message-area";-->
+<!--                    }-->
+<!--                }, 5000);-->
+<!--            }-->
+<!--        }-->
+
+<!--        // Сброс формы (очистить все поля, кроме приоритета по умолчанию)-->
+<!--        function resetFormFields() {-->
+<!--            document.getElementById("taskTitle").value = "";-->
+<!--            document.getElementById("taskDesc").value = "";-->
+<!--            document.getElementById("taskDueDate").value = "";-->
+<!--            document.getElementById("taskCategory").selectedIndex = 0;-->
+<!--            // сбросить приоритет на низкий (low)-->
+<!--            const lowRadio = document.querySelector('input[name="priority"][value="low"]');-->
+<!--            if (lowRadio) lowRadio.checked = true;-->
+<!--            // убираем сообщение-->
+<!--            const msgDiv = document.getElementById("formMessage");-->
+<!--            msgDiv.style.display = "none";-->
+<!--            msgDiv.className = "message-area";-->
+<!--        }-->
+
+<!--        // Функция создания задачи и сохранения в общий список-->
+<!--        function createAndSaveTask(event) {-->
+<!--            event.preventDefault();-->
+
+<!--            // Получаем название задачи (обязательное поле)-->
+<!--            const titleInput = document.getElementById("taskTitle");-->
+<!--            let title = titleInput.value.trim();-->
+<!--            if (title === "") {-->
+<!--                showMessage("Пожалуйста, укажите название задачи", true);-->
+<!--                titleInput.focus();-->
+<!--                return;-->
+<!--            }-->
+
+<!--            if (title.length > 120) {-->
+<!--                title = title.substring(0, 120);-->
+<!--            }-->
+
+<!--            // описание-->
+<!--            const description = document.getElementById("taskDesc").value.trim();-->
+<!--            // приоритет-->
+<!--            let priorityValue = "low";-->
+<!--            const selectedPriority = document.querySelector('input[name="priority"]:checked');-->
+<!--            if (selectedPriority) priorityValue = selectedPriority.value;-->
+
+<!--            // дата-->
+<!--            const dueDate = document.getElementById("taskDueDate").value;-->
+<!--            // категория-->
+<!--            const category = document.getElementById("taskCategory").value;-->
+<!--            let categoryLabel = "";-->
+<!--            const catSelect = document.getElementById("taskCategory");-->
+<!--            if (catSelect.selectedIndex >= 0) {-->
+<!--                categoryLabel = catSelect.options[catSelect.selectedIndex].text;-->
+<!--            } else {-->
+<!--                categoryLabel = "📋 Задача";-->
+<!--            }-->
+
+<!--            // Формируем текст для отображения в основном списке-->
+<!--            // Добавим в начало эмодзи или иконку в зависимости от категории/приоритета-->
+<!--            let priorityEmoji = "";-->
+<!--            if (priorityValue === "high") priorityEmoji = "🔴 ";-->
+<!--            else if (priorityValue === "medium") priorityEmoji = "🟠 ";-->
+<!--            else priorityEmoji = "🟢 ";-->
+
+<!--            let categoryEmoji = "";-->
+<!--            if (category === "личные") categoryEmoji = "🏡 ";-->
+<!--            else if (category === "работа") categoryEmoji = "💼 ";-->
+<!--            else if (category === "здоровье") categoryEmoji = "🧘 ";-->
+<!--            else if (category === "дом") categoryEmoji = "🏠 ";-->
+<!--            else categoryEmoji = "✨ ";-->
+
+<!--            // формируем красивую строку задачи: [приоритет] Название (срок/категория)-->
+<!--            let displayText = `${priorityEmoji}${title}`;-->
+<!--            if (dueDate) {-->
+<!--                // добавим дату читаемо-->
+<!--                const formattedDate = dueDate.split('-').reverse().join('.');-->
+<!--                displayText += ` 📅 ${formattedDate}`;-->
+<!--            }-->
+<!--            // можно добавить категорию без излишнего шума-->
+<!--            if (category !== "другое") {-->
+<!--                displayText += ` · ${categoryEmoji}`;-->
+<!--            } else {-->
+<!--                displayText += ` · ${categoryEmoji}`;-->
+<!--            }-->
+
+<!--            // если есть описание, его не вставляем в текст задачи (чтобы не загромождать),-->
+<!--            // но его можно было бы сохранить в дополнительном поле. Для совместимости с главной страницей-->
+<!--            // мы используем только text и completed/id. Сохраним описание в отдельном поле?-->
+<!--            // Главная страница поддерживает только text и completed. Поэтому мы добавим в текст задачи небольшую метку,-->
+<!--            // а описание сохраним в localStorage дополнительно? Нет, чтобы не ломать логику,-->
+<!--            // мы можем сохранить описание в самом тексте (не очень красиво). Но для расширенной демонстрации-->
+<!--            // мы можем хранить расширенные данные отдельно, но основная страница отобразит только text.-->
+<!--            // Однако для лучшего UX сохраним описание в специальном поле metadata? Главная страница его не увидит.-->
+<!--            // В целях полной совместимости с первой страницей (которая показывает только text) добавим краткую информацию.-->
+<!--            let finalTaskText = displayText;-->
+<!--            if (description) {-->
+<!--                // добавим в задачу небольшую подсказку, что есть описание, без перегрузки-->
+<!--                if (description.length < 35) {-->
+<!--                    finalTaskText += ` 📝: ${description}`;-->
+<!--                } else {-->
+<!--                    finalTaskText += ` 📝: ${description.substring(0, 32)}...`;-->
+<!--                }-->
+<!--            }-->
+
+<!--            // Создаем объект задачи (как на главной странице)-->
+<!--            const newTask = {-->
+<!--                id: generateId(),-->
+<!--                text: finalTaskText,-->
+<!--                completed: false,-->
+<!--                // необязательные метаданные для возможного расширения (будут проигнорированы основной страницей, но сохранены)-->
+<!--                meta: {-->
+<!--                    rawTitle: title,-->
+<!--                    description: description,-->
+<!--                    priority: priorityValue,-->
+<!--                    dueDate: dueDate,-->
+<!--                    category: category,-->
+<!--                    createdAt: new Date().toISOString()-->
+<!--                }-->
+<!--            };-->
+
+<!--            // Получаем текущие задачи и добавляем новую-->
+<!--            const currentTasks = getCurrentTasks();-->
+<!--            currentTasks.unshift(newTask); // добавляем в начало списка (свежая задача сверху)-->
+<!--            saveTasks(currentTasks);-->
+
+<!--            // Показать успешное сообщение-->
+<!--            showMessage(`Задача "${title}" успешно создана! Вы можете вернуться на главную страницу.`, false);-->
+
+<!--            // Сбросить форму, но оставить сообщение об успехе-->
+<!--            // очищаем все поля, кроме приоритета по умолчанию-->
+<!--            resetFormFields();-->
+
+<!--            // Дополнительно: фокусируем на названии для быстрого создания следующей задачи-->
+<!--            document.getElementById("taskTitle").focus();-->
+<!--        }-->
+
+<!--        // Кнопка "Очистить" — сброс всех полей ввода-->
+<!--        function clearForm() {-->
+<!--            resetFormFields();-->
+<!--            showMessage("Форма очищена", false);-->
+<!--        }-->
+
+<!--        // Переход на главную страницу (index.html или текущий домен)-->
+<!--        function navigateToMain() {-->
+<!--            // Поскольку основная страница — это первый документ, можно вернуться на предыдущую страницу в истории,-->
+<!--            // но также предлагаем перейти на главную (если url известен). Предполагаем, что основная страница называется index.html-->
+<!--            // либо открывается по умолчанию. Для демонстрации используем относительный путь './' или просто перезагрузка на главную.-->
+<!--            // Логичнее всего предложить перейти на главную страницу с задачами.-->
+<!--            // Если хотим сохранить список после создания — пользователь увидит новую задачу.-->
+<!--            if (window.location.pathname.includes("create.html")) {-->
+<!--                // Если мы в отдельном файле create.html, переходим на index.html или на главную страницу (которая обычно index)-->
+<!--                window.location.href = "./index.html";-->
+<!--            } else {-->
+<!--                // fallback-->
+<!--                window.location.href = "/";-->
+<!--            }-->
+<!--        }-->
+
+<!--        // Обработчик для кнопки "На главную"-->
+<!--        function initBackButton() {-->
+<!--            const backLink = document.getElementById("backToMainLink");-->
+<!--            if (backLink) {-->
+<!--                backLink.addEventListener("click", (e) => {-->
+<!--                    e.preventDefault();-->
+<!--                    navigateToMain();-->
+<!--                });-->
+<!--            }-->
+<!--        }-->
+
+<!--        // Инициализация формы и событий-->
+<!--        function initForm() {-->
+<!--            const form = document.getElementById("taskCreationForm");-->
+<!--            form.addEventListener("submit", createAndSaveTask);-->
+
+<!--            const clearBtn = document.getElementById("clearFormBtn");-->
+<!--            clearBtn.addEventListener("click", clearForm);-->
+
+<!--            initBackButton();-->
+
+<!--            // Установка минимальной даты (сегодня) для поля даты - приятный UX-->
+<!--            const today = new Date().toISOString().split('T')[0];-->
+<!--            const dueDateInput = document.getElementById("taskDueDate");-->
+<!--            if (dueDateInput) {-->
+<!--                dueDateInput.min = today;-->
+<!--            }-->
+
+<!--            // Сообщаем в консоль, что страница готова-->
+<!--            console.log("Страница создания задачи готова. Задачи сохраняются в localStorage совместно с главным списком.");-->
+<!--        }-->
+
+<!--        // Запуск после загрузки DOM-->
+<!--        document.addEventListener("DOMContentLoaded", initForm);-->
+<!--    </script>-->
+</body>
+</html>

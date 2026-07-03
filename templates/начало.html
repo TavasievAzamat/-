@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Магазин — Небесные товары</title>
+    <!-- Встроенные стили: лёгкая, воздушная гамма в оттенках небесно-голубого -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: linear-gradient(145deg, #d9eefc 0%, #c2e0fa 100%);
+            color: #0b2b3b;
+            line-height: 1.5;
+            padding: 2rem 1.5rem;
+            min-height: 100vh;
+        }
+
+        /* основной контейнер-каркас */
+        .app-container {
+            max-width: 1300px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(0px);
+            border-radius: 2rem;
+            box-shadow: 0 20px 35px -12px rgba(0, 70, 100, 0.25);
+            overflow: hidden;
+            transition: all 0.2s ease;
+        }
+
+        /* HEADER — свежий, небесный */
+        header {
+            background: #ffffffdd;
+            backdrop-filter: blur(8px);
+            background: linear-gradient(98deg, #f0faff 0%, #e7f5fe 100%);
+            padding: 1.5rem 2rem;
+            border-bottom: 2px solid #b7dcf2;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 1rem;
+        }
+
+        header h1 {
+            font-size: 1.9rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #196e8f, #399ccf);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            letter-spacing: -0.3px;
+            text-shadow: 0 1px 1px rgba(255,255,255,0.5);
+        }
+
+        nav ul {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        nav a {
+            text-decoration: none;
+            font-weight: 500;
+            color: #1976a5;
+            font-size: 1.1rem;
+            padding: 0.4rem 0;
+            transition: 0.2s;
+            border-bottom: 2px solid transparent;
+        }
+
+        nav a:hover {
+            color: #0c4b6e;
+            border-bottom-color: #62b5e8;
+        }
+
+        /* главная секция товара — грид + небесный акцент */
+        #product-details {
+            padding: 2rem 2rem 2.2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem 2.5rem;
+            background: #ffffff;
+        }
+
+        /* стили для блока изображения */
+        .product-image-block {
+            background: #f9feff;
+            border-radius: 1.75rem;
+            padding: 1rem;
+            box-shadow: 0 8px 20px rgba(88, 163, 207, 0.15);
+            transition: transform 0.2s ease;
+            border: 1px solid #cbeafe;
+        }
+
+        .product-image-block img {
+            width: 100%;
+            height: auto;
+            aspect-ratio: 4 / 3;
+            object-fit: cover;
+            border-radius: 1.25rem;
+            display: block;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+            background: #e3f2fd;
+        }
+
+        /* информационная часть */
+        .product-info-block {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        .product-name {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #135e82;
+            letter-spacing: -0.2px;
+            border-left: 5px solid #6ec3f0;
+            padding-left: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .price-tag {
+            background: #eef6fc;
+            display: inline-block;
+            width: fit-content;
+            padding: 0.5rem 1.2rem;
+            border-radius: 60px;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #0e6b92;
+            box-shadow: inset 0 1px 2px #ffffff, 0 4px 8px rgba(0, 0, 0, 0.02);
+            border: 1px solid #cde5f5;
+        }
+
+        .price-tag span {
+            font-size: 1rem;
+            font-weight: 400;
+            color: #427c9e;
+        }
+
+        .description-text {
+            background: #fafeff;
+            padding: 1rem 1.2rem;
+            border-radius: 1.2rem;
+            border-left: 3px solid #7ac8f0;
+            color: #1f526d;
+            line-height: 1.5;
+            font-size: 1rem;
+        }
+
+        /* блок отзывов — со стилем небесных карточек */
+        .reviews-section {
+            margin-top: 0.5rem;
+        }
+
+        .reviews-section h3 {
+            font-size: 1.45rem;
+            font-weight: 600;
+            color: #176e94;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .reviews-section h3::before {
+            content: "⭐";
+            font-size: 1.2rem;
+            filter: drop-shadow(0 1px 1px #bfdaf0);
+        }
+
+        .reviews-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.85rem;
+        }
+
+        .reviews-list li {
+            background: #f1f9ff;
+            padding: 0.9rem 1.2rem;
+            border-radius: 1.2rem;
+            font-size: 0.98rem;
+            color: #1b4b66;
+            border: 1px solid #cde5f2;
+            transition: all 0.2s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+        }
+
+        .reviews-list li::before {
+            content: "🗣️ ";
+            font-size: 1rem;
+            opacity: 0.8;
+        }
+
+        .reviews-list li:hover {
+            background: #e5f3fe;
+            border-color: #9bcff0;
+            transform: translateX(4px);
+        }
+
+        /* кнопка акцент — небесная с оттенком лазури */
+        .add-to-cart-btn {
+            background: linear-gradient(105deg, #3ba5db, #2381b5);
+            border: none;
+            padding: 1rem 0;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: white;
+            border-radius: 60px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            box-shadow: 0 8px 14px -8px rgba(38, 120, 160, 0.4);
+            width: 100%;
+            max-width: 280px;
+            margin-top: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            letter-spacing: 0.3px;
+        }
+
+        .add-to-cart-btn:hover {
+            background: linear-gradient(105deg, #2f93c9, #1b6c99);
+            transform: scale(0.98);
+            box-shadow: 0 5px 12px rgba(31, 117, 158, 0.3);
+        }
+
+        .add-to-cart-btn:active {
+            transform: scale(0.96);
+        }
+
+        /* подвал с небесным оттенком */
+        footer {
+            background: #e2f0f9;
+            text-align: center;
+            padding: 1.2rem;
+            color: #2f6885;
+            font-size: 0.85rem;
+            border-top: 1px solid #cbe0ed;
+            font-weight: 500;
+        }
+
+        /* адаптив для планшетов и телефонов */
+        @media (max-width: 780px) {
+            body {
+                padding: 1rem;
+            }
+            #product-details {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+                padding: 1.5rem;
+            }
+            header {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            .add-to-cart-btn {
+                max-width: 100%;
+            }
+            .product-name {
+                font-size: 1.5rem;
+            }
+            .price-tag {
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .price-tag {
+                font-size: 1.3rem;
+                padding: 0.3rem 1rem;
+            }
+            .reviews-list li {
+                font-size: 0.9rem;
+            }
+        }
+
+        /* дополнительные акценты в духе неба */
+        .reviews-list li:first-child {
+            border-left: 4px solid #6bc2f0;
+        }
+        .reviews-list li:last-child {
+            border-right: 2px solid #d7edfc;
+        }
+    </style>
+</head>
+<body>
+<div class="app-container">
+    <header>
+        <h1>✨ Облачный маркет</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="cart.html">Корзина 🛒</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="product-details">
+        <!-- Блок изображения (стилизованный) -->
+        <div class="product-image-block">
+            <img src="https://picsum.photos/id/20/600/450" alt="Изображение товара — стильный современный продукт" loading="lazy">
+        </div>
+
+        <!-- Блок всей информации о товаре -->
+        <div class="product-info-block">
+            <div class="product-name">☁️ Воздушная коллекция | Небесный дрон</div>
+            <div class="price-tag">
+                1000 <span style="font-size: 1.1rem;">₽</span>
+            </div>
+            <div class="description-text">
+                📦 Описание товара: Лёгкий, как облако, и мощный, как ветер. Идеальный выбор для творческих задач.
+                Характеристики: интеллектуальная стабилизация, время полёта до 45 мин, радиус действия 2 км.
+                Камера 4K с небесным режимом съёмки. Полностью совместим со смарт-устройствами.
+            </div>
+
+            <!-- Отзывы с оформлением в небесном стиле -->
+            <div class="reviews-section">
+                <h3>Отзывы покупателей</h3>
+                <ul class="reviews-list">
+                    <li>⭐ Отзыв 1: Невероятный товар! Качество сборки — мечта. Снимает плавно, как перистые облака. Рекомендую!</li>
+                    <li>⭐ Отзыв 2: Доставка быстрая, упаковка надёжная. Дрон лёгкий, управление интуитивное. Полный восторг.</li>
+                    <li>⭐ Отзыв 3: Лучшее приобретение за год! Аккумулятор держит долго, цвет небесно-голубой радует глаз.</li>
+                </ul>
+            </div>
+
+            <!-- кнопка добавить в корзину -->
+            <button id="add-to-cart" class="add-to-cart-btn">
+                🛒 Добавить в корзину
+            </button>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 Мое Портфолио | Стиль — небесная свежесть и лёгкость</p>
+    </footer>
+</div>
+
+<!-- легкий интерактив для имитации добавления в корзину (сохраняет небесное настроение) -->
+<script>
+    (function() {
+        const cartButton = document.getElementById('add-to-cart');
+        if (cartButton) {
+            cartButton.addEventListener('click', function(e) {
+                // простая имитация добавления в корзину
+                const originalText = cartButton.innerHTML;
+                cartButton.innerHTML = '✅ Добавлено!';
+                cartButton.style.background = '#278f65';
+                cartButton.style.boxShadow = 'none';
+                setTimeout(() => {
+                    cartButton.innerHTML = originalText;
+                    cartButton.style.background = 'linear-gradient(105deg, #3ba5db, #2381b5)';
+                    cartButton.style.boxShadow = '0 8px 14px -8px rgba(38, 120, 160, 0.4)';
+                }, 1500);
+                // можно также вывести всплывающее уведомление в духе неба (alert или кастом)
+                const toastMsg = document.createElement('div');
+                toastMsg.textContent = '✨ Товар добавлен в корзину ✨';
+                toastMsg.style.position = 'fixed';
+                toastMsg.style.bottom = '20px';
+                toastMsg.style.left = '50%';
+                toastMsg.style.transform = 'translateX(-50%)';
+                toastMsg.style.backgroundColor = '#cbeafe';
+                toastMsg.style.color = '#135e82';
+                toastMsg.style.padding = '12px 24px';
+                toastMsg.style.borderRadius = '50px';
+                toastMsg.style.fontWeight = '500';
+                toastMsg.style.backdropFilter = 'blur(10px)';
+                toastMsg.style.background = '#f0faffdd';
+                toastMsg.style.border = '1px solid #91caf0';
+                toastMsg.style.boxShadow = '0 8px 18px rgba(0,0,0,0.05)';
+                toastMsg.style.zIndex = '999';
+                toastMsg.style.fontSize = '0.95rem';
+                document.body.appendChild(toastMsg);
+                setTimeout(() => {
+                    toastMsg.style.opacity = '0';
+                    setTimeout(() => toastMsg.remove(), 400);
+                }, 2000);
+            });
+        }
+    })();
+</script>
+</body>
+</html>
